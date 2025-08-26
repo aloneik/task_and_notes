@@ -1,0 +1,45 @@
+# .NET build artifacts
+**/bin/
+**/obj/
+**/artifacts/
+**/TestResults/
+
+# IDEs and editors
+.vs/
+.idea/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS
+.DS_Store
+Thumbs.db
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+nuget.config
+
+# Logs
+*.log
+logs/
+
+# Avalonia designer cache
+**/obj/**/avalonia/
+
+# Rider / ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+# Local databases
+notes.db
+*.db
+
+# Publish outputs
+publish/
+
+

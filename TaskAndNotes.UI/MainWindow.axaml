@@ -1,0 +1,43 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:TaskAndNotes.UI.ViewModels"
+        x:Class="TaskAndNotes.UI.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Width="900" Height="600"
+        Title="Task &amp; Notes">
+  <Design.DataContext>
+    <vm:MainWindowViewModel />
+  </Design.DataContext>
+  <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
+    <StackPanel Orientation="Horizontal" Margin="8">
+      <Button Content="New Note" Command="{Binding NewNoteCommand}"/>
+      <Button Content="Save" Margin="8,0,0,0" Command="{Binding SaveNoteCommand}"/>
+      <Button Content="Delete" Margin="8,0,0,0" Command="{Binding DeleteNoteCommand}"/>
+      <Button Content="Refresh" Margin="8,0,0,0" Command="{Binding RefreshNotesCommand}"/>
+    </StackPanel>
+    <SplitView Grid.Row="1" IsPaneOpen="True" DisplayMode="Inline" OpenPaneLength="300">
+      <SplitView.Pane>
+        <Border Background="{DynamicResource ThemeControlLowBrush}">
+          <StackPanel>
+            <TextBox Margin="8" Watermark="Search" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox Margin="8,0,8,8" ItemsSource="{Binding SortOptions}" SelectedIndex="{Binding SelectedSortIndex}"/>
+            <ListBox ItemsSource="{Binding FilteredNotes}" SelectedItem="{Binding SelectedNote}" BorderThickness="0">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:NoteViewModel">
+                <StackPanel Margin="8">
+                  <TextBlock Text="{Binding Title}" FontWeight="SemiBold"/>
+                  <TextBlock Text="{Binding Preview}" Classes="caption"/>
+                  <TextBlock Text="{Binding UpdatedAt}" Classes="caption"/>
+                </StackPanel>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+          </StackPanel>
+        </Border>
+      </SplitView.Pane>
+      <SplitView.Content>
+        <ContentControl Content="{Binding SelectedNote}"/>
+      </SplitView.Content>
+    </SplitView>
+  </Grid>
+</Window>

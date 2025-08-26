@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:TaskAndNotes.UI.ViewModels"
+             x:Class="TaskAndNotes.UI.Views.NoteView"
+             x:DataType="vm:NoteViewModel">
+  <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*,Auto,Auto" Margin="8">
+    <TextBox Grid.ColumnSpan="3" Text="{Binding Title}" FontSize="18" FontWeight="Bold" Watermark="Title"/>
+    <TextBox Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Content}" AcceptsReturn="True" Watermark="Content"/>
+    <ListBox Grid.Row="2" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
+      <ListBox.ItemTemplate>
+        <DataTemplate x:DataType="vm:ChecklistItemViewModel">
+          <DockPanel>
+            <CheckBox IsChecked="{Binding IsCompleted}" Margin="0,0,8,0"/>
+            <TextBox Text="{Binding Text}"/>
+          </DockPanel>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+    <Button Grid.Row="2" Grid.Column="1" Content="+" Width="32" Height="32" Command="{Binding AddItemCommand}"/>
+    <Button Grid.Row="2" Grid.Column="2" Content="-" Width="32" Height="32" Command="{Binding RemoveSelectedItemCommand}"/>
+  </Grid>
+</UserControl>
+
+
