@@ -25,7 +25,7 @@ public sealed class LiteDbNoteRepository : INoteRepository, IDisposable
     public Task<Note?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var note = _notes.FindById(id);
-        return Task.FromResult(note);
+        return Task.FromResult((Note?)note);
     }
 
     public Task AddAsync(Note note, CancellationToken cancellationToken)

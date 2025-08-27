@@ -93,8 +93,8 @@ public sealed class NoteViewModel : ObservableObject
         }
     }
 
-    public RelayCommand AddItemCommand { get; private set; }
-    public RelayCommand RemoveSelectedItemCommand { get; private set; }
+    public RelayCommand AddItemCommand { get; private set; } = null!;
+    public RelayCommand RemoveSelectedItemCommand { get; private set; } = null!;
 
     private void InitializeCommands()
     {
