@@ -3,10 +3,14 @@
              xmlns:vm="clr-namespace:TaskAndNotes.UI.ViewModels"
              x:Class="TaskAndNotes.UI.Views.NoteView"
              x:DataType="vm:NoteViewModel">
-  <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*,Auto,Auto" Margin="8">
-    <TextBox Grid.ColumnSpan="3" Text="{Binding Title}" FontSize="18" FontWeight="Bold" Watermark="Title"/>
-    <TextBox Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Content}" AcceptsReturn="True" Watermark="Content"/>
-    <ListBox Grid.Row="2" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
+  <Grid RowDefinitions="Auto,Auto,* ,Auto" ColumnDefinitions="*,Auto,Auto" Margin="8">
+    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="0,8,0,8">
+      <Button Content="Save" Command="{Binding SaveCurrentNoteCommand}"/>
+      <Button Content="Delete" Command="{Binding DeleteCurrentNoteCommand}"/>
+    </StackPanel>
+    <TextBox Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Title}" FontSize="18" FontWeight="Bold" Watermark="Title"/>
+    <TextBox Grid.Row="2" Grid.ColumnSpan="3" Text="{Binding Content}" AcceptsReturn="True" Watermark="Content"/>
+    <ListBox Grid.Row="3" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
       <ListBox.ItemTemplate>
         <DataTemplate x:DataType="vm:ChecklistItemViewModel">
           <DockPanel>
@@ -16,8 +20,8 @@
         </DataTemplate>
       </ListBox.ItemTemplate>
     </ListBox>
-    <Button Grid.Row="2" Grid.Column="1" Content="+" Width="32" Height="32" Command="{Binding AddItemCommand}"/>
-    <Button Grid.Row="2" Grid.Column="2" Content="-" Width="32" Height="32" Command="{Binding RemoveSelectedItemCommand}"/>
+    <Button Grid.Row="3" Grid.Column="1" Content="+" Width="32" Height="32" Command="{Binding AddItemCommand}"/>
+    <Button Grid.Row="3" Grid.Column="2" Content="-" Width="32" Height="32" Command="{Binding RemoveSelectedItemCommand}"/>
   </Grid>
 </UserControl>
 

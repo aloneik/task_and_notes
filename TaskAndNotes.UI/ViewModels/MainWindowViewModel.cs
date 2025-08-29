@@ -101,7 +101,7 @@ public sealed class MainWindowViewModel : ObservableObject
         Notes.Clear();
         foreach (var n in all)
         {
-            Notes.Add(new NoteViewModel(n, _noteService));
+            Notes.Add(new NoteViewModel(n, _noteService, OnNoteDeleted, OnNoteSaved));
         }
         ApplyFilterAndSort();
 
@@ -120,7 +120,7 @@ public sealed class MainWindowViewModel : ObservableObject
     private void NewNote()
     {
         var model = new Note { Title = "New note", Content = string.Empty };
-        var vm = new NoteViewModel(model, _noteService);
+        var vm = new NoteViewModel(model, _noteService, OnNoteDeleted, OnNoteSaved);
         Notes.Insert(0, vm);
         SelectedNote = vm;
         ApplyFilterAndSort();
@@ -158,6 +158,23 @@ public sealed class MainWindowViewModel : ObservableObject
             await _noteService.UpdateAsync(model, CancellationToken.None);
         }
         await LoadAsync(model.Id);
+    }
+
+    private void OnNoteSaved()
+    {
+        // Refresh ordering since UpdatedAt changed
+        ApplyFilterAndSort();
+    }
+
+    private async void OnNoteDeleted(Guid id)
+    {
+        var match = Notes.FirstOrDefault(n => n.Id == id);
+        if (match is not null)
+        {
+            Notes.Remove(match);
+        }
+        SelectedNote = Notes.FirstOrDefault();
+        await LoadAsync(SelectedNote?.Id);
     }
 
     private void ApplyFilterAndSort()

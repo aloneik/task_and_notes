@@ -16,6 +16,8 @@ public sealed class NoteViewModel : ObservableObject
 {
     private readonly Note _model;
     private readonly NoteService? _noteService;
+    private readonly Action<Guid>? _onDeleted;
+    private readonly Action? _onSaved;
     private ChecklistItemViewModel? _selectedItem;
     private CancellationTokenSource? _saveDebounceCts;
 
@@ -26,10 +28,12 @@ public sealed class NoteViewModel : ObservableObject
         InitializeCommands();
     }
 
-    public NoteViewModel(Note model, NoteService noteService)
+    public NoteViewModel(Note model, NoteService noteService, Action<Guid>? onDeleted = null, Action? onSaved = null)
         : this(model)
     {
         _noteService = noteService;
+        _onDeleted = onDeleted;
+        _onSaved = onSaved;
         HookItemEvents();
         Items.CollectionChanged += OnItemsCollectionChanged;
     }
@@ -95,11 +99,15 @@ public sealed class NoteViewModel : ObservableObject
 
     public RelayCommand AddItemCommand { get; private set; } = null!;
     public RelayCommand RemoveSelectedItemCommand { get; private set; } = null!;
+    public RelayCommand SaveCurrentNoteCommand { get; private set; } = null!;
+    public RelayCommand DeleteCurrentNoteCommand { get; private set; } = null!;
 
     private void InitializeCommands()
     {
         AddItemCommand = new RelayCommand(AddItem);
         RemoveSelectedItemCommand = new RelayCommand(_ => RemoveSelectedItem(), _ => SelectedItem is not null);
+        SaveCurrentNoteCommand = new RelayCommand(async _ => await SaveNowAsync());
+        DeleteCurrentNoteCommand = new RelayCommand(async _ => await DeleteNowAsync());
     }
 
     private void AddItem()
@@ -128,6 +136,35 @@ public sealed class NoteViewModel : ObservableObject
         _model.Items = Items.Select(vm => vm.ToModel()).ToList();
         _model.UpdatedAt = DateTimeOffset.UtcNow;
         return _model;
+    }
+
+    private async Task SaveNowAsync()
+    {
+        if (_noteService is null)
+        {
+            return;
+        }
+        var model = ToModel();
+        var existing = await _noteService.GetByIdAsync(model.Id, CancellationToken.None);
+        if (existing is null)
+        {
+            await _noteService.AddAsync(model, CancellationToken.None);
+        }
+        else
+        {
+            await _noteService.UpdateAsync(model, CancellationToken.None);
+        }
+        _onSaved?.Invoke();
+    }
+
+    private async Task DeleteNowAsync()
+    {
+        if (_noteService is null)
+        {
+            return;
+        }
+        await _noteService.DeleteAsync(Id, CancellationToken.None);
+        _onDeleted?.Invoke(Id);
     }
 
     private void HookItemEvents()
