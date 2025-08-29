@@ -9,15 +9,16 @@
     <vm:MainWindowViewModel />
   </Design.DataContext>
   <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
-    <StackPanel Orientation="Horizontal" Margin="8">
+    <StackPanel Orientation="Horizontal" Margin="8" Spacing="8">
       <Button Content="New Note" Command="{Binding NewNoteCommand}"/>
-      <Button Content="Save" Margin="8,0,0,0" Command="{Binding SaveNoteCommand}"/>
-      <Button Content="Delete" Margin="8,0,0,0" Command="{Binding DeleteNoteCommand}"/>
-      <Button Content="Refresh" Margin="8,0,0,0" Command="{Binding RefreshNotesCommand}"/>
+      <Button Content="Save" Command="{Binding SaveNoteCommand}"/>
+      <Button Content="Delete" Command="{Binding DeleteNoteCommand}"/>
+      <Button Content="Refresh" Command="{Binding RefreshNotesCommand}"/>
+      <ToggleSwitch Content="Dark theme" IsChecked="{Binding IsDarkTheme}"/>
     </StackPanel>
     <SplitView Grid.Row="1" IsPaneOpen="True" DisplayMode="Inline" OpenPaneLength="300">
       <SplitView.Pane>
-        <Border Background="{DynamicResource ThemeControlLowBrush}">
+        <Border Background="{DynamicResource SidebarBackgroundBrush}">
           <StackPanel>
             <TextBox Margin="8" Watermark="Search" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <ComboBox Margin="8,0,8,8" ItemsSource="{Binding SortOptions}" SelectedIndex="{Binding SelectedSortIndex}"/>

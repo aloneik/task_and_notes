@@ -3,12 +3,25 @@
              xmlns:views="clr-namespace:TaskAndNotes.UI.Views"
              xmlns:vm="clr-namespace:TaskAndNotes.UI.ViewModels"
              x:Class="TaskAndNotes.UI.App"
-             RequestedThemeVariant="Default">
+             RequestedThemeVariant="Light">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.Styles>
         <FluentTheme />
     </Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="SidebarBackgroundBrush" Color="#FFF5F7FA"/>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="SidebarBackgroundBrush" Color="#FF2A2A2A"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 
     <Application.DataTemplates>
         <DataTemplate DataType="{x:Type vm:NoteViewModel}">

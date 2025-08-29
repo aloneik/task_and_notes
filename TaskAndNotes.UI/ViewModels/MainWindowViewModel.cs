@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using TaskAndNotes.Application.Services;
 using TaskAndNotes.Domain.Models;
 using TaskAndNotes.UI.Utils;
+using Avalonia;
+using Avalonia.Styling;
 
 namespace TaskAndNotes.UI.ViewModels;
 
@@ -40,6 +42,19 @@ public sealed class MainWindowViewModel : ObservableObject
     public RelayCommand RefreshNotesCommand { get; }
 
     public IReadOnlyList<string> SortOptions { get; } = new[] { "Updated (newest)", "Title (A→Z)" };
+
+    private bool _isDarkTheme;
+    public bool IsDarkTheme
+    {
+        get => _isDarkTheme;
+        set
+        {
+            if (SetProperty(ref _isDarkTheme, value))
+            {
+                global::Avalonia.Application.Current!.RequestedThemeVariant = value ? ThemeVariant.Dark : ThemeVariant.Light;
+            }
+        }
+    }
 
     public string SearchText
     {
@@ -75,6 +90,8 @@ public sealed class MainWindowViewModel : ObservableObject
         RefreshNotesCommand = new RelayCommand(async _ => await LoadAsync());
 
         _ = LoadAsync();
+        // Initialize theme state from current application theme
+        IsDarkTheme = global::Avalonia.Application.Current?.ActualThemeVariant == ThemeVariant.Dark;
         Notes.CollectionChanged += (_, __) => ApplyFilterAndSort();
     }
 
